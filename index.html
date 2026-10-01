@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="sátántangó: fotos, pensamientos, lecturas y favoritos.">
+<title>Sátántangó</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&display=swap">
+<style>
+html,body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+/* Layout: a dubbed VHS tape filling the whole screen. Everything set in the VCR on-screen-display face; the stretched glitch portrait sits behind on the right; red tracking box is the one recurring frame. */
+:root{
+  --paper:#ffffff;
+  --ink:#1c17c9;
+  --ink-2:#7b78c4;
+  --line:#d9d8f2;
+  --red:#e3001b;
+  --mag:#ff00a8;
+  --veil:rgba(255,255,255,.84);
+  --osd:"VT323","Courier New",monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{background:var(--paper)}
+body{background:var(--paper);color:var(--ink);font-family:var(--osd);font-size:22px;line-height:1.15;overflow-x:hidden}
+::selection{background:var(--mag);color:var(--paper)}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+
+.ghost{position:fixed;top:0;right:0;width:58vw;height:100vh;z-index:0;pointer-events:none;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.55) 22%,#000 45%);mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.55) 22%,#000 45%)}
+.ghost img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%;transform:scaleX(1.55) scaleY(1.08);transform-origin:70% 40%;filter:saturate(1.25) contrast(1.05);animation:track 7s steps(1,end) infinite}
+@keyframes track{0%,92%{transform:scaleX(1.55) scaleY(1.08) translateX(0)}93%{transform:scaleX(1.62) scaleY(1.08) translateX(-14px)}95%{transform:scaleX(1.5) scaleY(1.1) translateX(9px)}97%{transform:scaleX(1.55) scaleY(1.08) translateX(0)}}
+.scan{position:fixed;inset:0;z-index:1;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(28,23,201,.05) 0 1px,transparent 1px 3px)}
+
+.page{position:relative;z-index:2;padding-inline:clamp(16px,4vw,56px);padding-block:22px 110px}
+
+.osd{font-size:26px;line-height:1;display:flex;flex-wrap:wrap;gap:4px 26px;align-items:baseline}
+.osd .rec{color:var(--red)}
+.osd .rec::before{content:"●";margin-right:6px;animation:blink 1s steps(2,end) infinite}
+.osd .push{margin-left:auto}
+@keyframes blink{50%{opacity:0}}
+
+.logo{margin:4px 0 0;font-weight:400;line-height:.92;letter-spacing:-.02em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-shadow:4px 0 0 rgba(255,0,168,.55),-4px 0 0 rgba(0,190,255,.45);padding-top:.12em}
+.logo a{text-decoration:none;display:block}
+.logo canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp-edges}
+.logo canvas:not([width]){display:none}
+.logo canvas[width]+.logo-txt{display:none}
+.logo-txt{font-size:12vw}
+.nosignal{width:100%;aspect-ratio:4/3;background-color:#777;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='1'/><feColorMatrix values='0 0 0 1.6 -.3  0 0 0 1.6 -.3  0 0 0 1.6 -.3  0 0 0 0 1'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");background-size:160px 120px;animation:snow .2s steps(3) infinite}
+.ov-mid{left:50%;top:50%;transform:translate(-50%,-50%);background:var(--ink);padding:2px 12px;font-size:40px!important}
+.pair{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:stretch}
+.pair .latest{padding:12px 16px 12px 0}
+.counter{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:6px;background:var(--veil);border:2px solid var(--ink);padding:12px 16px}
+.counter span{color:var(--ink-2)}
+.counter b{font-weight:400;font-size:40px;color:var(--paper);background:var(--ink);padding:0 8px;letter-spacing:.12em;line-height:1.1}
+.collage{display:flex;flex-wrap:wrap;gap:22px 18px;align-items:flex-start;justify-content:center;padding:12px 0 24px}
+.collage button{all:unset;cursor:pointer;display:block;max-width:100%;background:var(--paper);padding:6px;box-shadow:0 1px 0 var(--line);transition:transform .15s}
+.collage button:hover{z-index:3;outline:2px solid var(--red)}
+.collage button:focus-visible{outline:2px solid var(--red)}
+.collage img{display:block;width:100%;height:auto}
+.viewer{position:fixed;inset:0;z-index:50;background:rgba(255,255,255,.94);display:flex;align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+.viewer img{max-width:100%;max-height:86vh;border:2px solid var(--red)}
+.viewer .ov{position:absolute;left:24px;top:18px;font-size:26px;color:var(--ink)}
+
+nav{background:var(--veil);margin-top:10px;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+nav ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;justify-content:space-between}
+nav a{display:block;font-size:26px;line-height:1;padding:8px 10px 7px;text-decoration:none;color:var(--ink-2)}
+nav a:hover{color:var(--ink)}
+nav a[aria-current="page"]{color:var(--paper);background:var(--ink)}
+
+section[data-page]{padding-top:36px}
+.osd-h{font-size:24px;color:var(--ink-2);margin:0 0 6px;background:var(--veil);display:table}
+.head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 24px;margin-bottom:28px;border-bottom:1px solid var(--line);padding-bottom:10px}
+h2.title{font-weight:400;text-transform:uppercase;font-size:clamp(56px,9vw,120px);line-height:.8;margin:0;letter-spacing:-.02em}
+.lede{font-size:24px;color:var(--ink-2);margin:0;max-width:40ch}
+.note{margin-top:32px;font-size:21px;color:var(--ink-2);max-width:60ch}
+.box{background:var(--veil)}
+
+/* HOME */
+.home{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(24px,4vw,64px);align-items:start}
+.quote{font-size:clamp(34px,4.4vw,60px);line-height:1;margin:0 0 10px;text-wrap:balance;background:var(--veil);display:inline}
+.quote-by{font-size:24px;color:var(--ink-2);margin-top:12px}
+.col{display:flex;flex-direction:column;gap:40px;min-width:0}
+.tape2{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(24px,4vw,64px);align-items:start;margin-top:clamp(64px,10vh,120px)}
+.still{position:relative;margin:-10px 0 0;border:2px solid var(--red);background:#fff;max-width:100%}
+.still img{display:block;width:100%;aspect-ratio:1;object-fit:cover;object-position:50% 42%}
+.still::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.05) 0 1px,transparent 1px 3px);pointer-events:none}
+.still .ov{position:absolute;font-size:26px;line-height:1.1;color:#fff;background:var(--ink);padding:0 8px;z-index:1}
+.ov-bl{left:16px;bottom:10px}
+.ov-tl{left:16px;top:10px;animation:blink 1.4s steps(2,end) infinite}
+.ov-br{right:16px;bottom:10px}
+.still figcaption{position:absolute;left:16px;bottom:10px;font-size:22px;color:#fff;z-index:1;opacity:.75}
+.shuffle{border:2px solid var(--ink);padding:14px 16px;background:var(--veil);display:flex;flex-direction:column;gap:2px}
+.sh-n{color:var(--red)}
+.sh-t{font-size:38px;line-height:1}
+.sh-a{color:var(--ink-2);margin-bottom:12px}
+.ahora{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;margin:0;background:var(--veil);padding:6px 0}
+.ahora dt{color:var(--ink-2)}
+.ahora dd{margin:0;font-size:26px;line-height:1}
+.stop{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px 24px;margin-top:56px;padding:10px 0;border-top:2px solid var(--ink);font-size:26px;background:var(--veil)}
+.stop span{color:var(--red)}
+.now{text-decoration:none;color:inherit;display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;border:2px solid var(--red);padding:12px 18px 12px 12px;background:var(--veil)}
+.now img{width:72px;height:72px;display:block;image-rendering:pixelated}
+.now .k{font-size:20px;color:var(--red);line-height:1}
+.now .s{font-size:34px;line-height:1}
+.now .a{color:var(--ink-2)}
+.latest{background:var(--veil);padding:12px 0}
+.latest p.txt{font-size:28px;margin:2px 0 10px}
+
+/* FOTOS */
+.board{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.tile{aspect-ratio:3/4;border:1px dashed var(--ink-2);display:flex;align-items:flex-end;padding:8px;color:var(--ink-2);background:var(--veil)}
+
+/* PENSAMIENTOS */
+.feed{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:0 32px}
+.post{padding:16px 0;border-bottom:1px solid var(--line);background:var(--veil)}
+.post time{font-size:21px;color:var(--ink-2)}
+.post p{font-size:30px;line-height:1.05;margin:4px 0 0}
+
+/* HISTORIAS */
+.tabs{display:flex;gap:6px;margin-bottom:24px;flex-wrap:wrap}
+.tabs button{font-family:var(--osd);font-size:30px;line-height:1;background:var(--veil);color:var(--ink-2);border:2px solid var(--ink-2);padding:6px 16px 7px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.index{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:16px}
+.index a{display:flex;flex-direction:column;gap:6px;height:100%;text-decoration:none;border:2px solid var(--ink);background:var(--veil);padding:16px 18px}
+.index a:hover{border-color:var(--red)}
+.index .num{color:var(--red);font-size:26px;line-height:1}
+.index .nm{font-size:36px;line-height:1}
+.index .ex{color:var(--ink-2);font-size:20px;line-height:1.15}
+.index .len{margin-top:auto;font-size:20px;color:var(--ink-2)}
+.reader{background:rgba(255,255,255,.93);padding:20px clamp(16px,3vw,40px) 28px;max-width:860px;border:2px solid var(--red)}
+.reader .back{display:inline-block;margin-bottom:18px}
+.r-title{font-weight:400;font-size:clamp(40px,5vw,64px);line-height:.95;margin:4px 0 22px}
+.r-body p{font-size:25px;line-height:1.3;margin:0 0 1em;max-width:62ch}
+.r-body p:first-child::first-letter{font-size:2.4em;color:var(--red);float:left;line-height:.8;margin:6px 8px 0 0}
+.r-end{margin-top:24px;color:var(--red);font-size:24px}
+.osd-sub{font-size:19px;color:var(--ink-2);margin:0}
+.tango{font-size:30px;letter-spacing:.06em;margin-bottom:24px}
+.tango span{color:var(--ink-2)}
+.empty{border:2px solid var(--red);padding:18px 22px;font-size:24px;color:var(--ink-2);background:var(--veil);max-width:640px}
+.empty b{display:block;color:var(--ink);font-weight:400;font-size:32px}
+
+/* FAVORITOS */
+.favs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:44px clamp(24px,3vw,48px);align-items:start}
+.fav h3{margin:0 0 8px;display:flex;align-items:baseline;gap:12px;font-weight:400;font-size:44px;line-height:1;text-transform:uppercase}
+.fav h3 small{font-size:22px;color:var(--red)}
+.fav ol{list-style:none;margin:0;padding:0;background:var(--veil)}
+.fav li{display:grid;grid-template-columns:1.4em 34px minmax(0,1fr);gap:10px;align-items:center;padding:5px 0;border-bottom:1px solid var(--line)}
+.n{color:var(--ink-2);font-variant-numeric:tabular-nums}
+.th{width:34px;height:34px;display:block;object-fit:cover;image-rendering:pixelated}
+.static{background-color:#888;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='34' height='34'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.4' numOctaves='1'/><feColorMatrix values='0 0 0 1.4 -.2  0 0 0 1.4 -.2  0 0 0 1.4 -.2  0 0 0 0 1'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");animation:snow .25s steps(3) infinite}
+@keyframes snow{0%{background-position:0 0}33%{background-position:-11px 7px}66%{background-position:9px -13px}}
+.th.txt{display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--paper);background:var(--ink)}
+.fav .t{font-size:24px;line-height:1.05;overflow-wrap:anywhere}
+.fav .by{color:var(--ink-2)}
+.morse{letter-spacing:.08em}
+.songs-col{grid-column:1/-1}
+.songs-col ol{columns:2 340px;column-gap:clamp(24px,3vw,48px);background:none}
+.songs-col li{break-inside:avoid;background:var(--veil)}
+
+.more-wrap{position:relative;margin-top:4px}
+.more{font-family:var(--osd);font-size:44px;line-height:.6;background:var(--veil);border:0;padding:0 8px 16px;cursor:pointer;color:var(--ink);letter-spacing:.12em}
+.more:hover,.more[aria-expanded="true"]{color:var(--red)}
+.pop{position:absolute;left:0;top:100%;z-index:15;width:min(1000px,calc(100vw - 32px));max-height:min(70vh,680px);overflow:auto;background:var(--paper);border:2px solid var(--red);padding:14px 18px 18px}
+.pop header{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+.pop header b{font-weight:400;font-size:40px;text-transform:uppercase}
+.pop header span{color:var(--ink-2)}
+.pop ol{list-style:none;margin:0;padding:0;columns:3 260px;column-gap:26px}
+.pop li{break-inside:avoid;display:grid;grid-template-columns:2em minmax(0,1fr);gap:4px;padding:3px 0;border-bottom:1px solid var(--line);font-size:21px;line-height:1.05}
+.pop li i{font-style:normal;color:var(--ink-2)}
+.pop footer{margin-top:12px;font-size:24px}
+
+/* LIBRO DE VISITAS */
+.gb{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:clamp(24px,4vw,64px);align-items:start}
+form{display:flex;flex-direction:column;gap:14px;border:2px solid var(--red);padding:20px;background:var(--veil)}
+label{font-size:24px;display:flex;flex-direction:column;gap:2px;line-height:1}
+label em{font-style:normal;color:var(--red)}
+input,textarea{font-family:var(--osd);font-size:26px;color:var(--ink);background:transparent;border:0;border-bottom:2px solid var(--ink);padding:4px 0;border-radius:0;outline:none}
+input:focus,textarea:focus{border-bottom-color:var(--red)}
+textarea{resize:vertical;min-height:110px}
+.err{font-size:22px;color:var(--red);min-height:1em;line-height:1}
+button.sign{align-self:flex-start;font-family:var(--osd);font-size:28px;background:var(--ink);color:var(--paper);border:0;padding:4px 16px 6px;cursor:pointer}
+button.sign:hover{background:var(--red)}
+.gb-list{background:var(--veil)}
+.entry{padding:12px 0;border-bottom:1px solid var(--line)}
+.entry .who{display:flex;justify-content:space-between;gap:12px;font-size:28px}
+.entry time{font-size:20px;color:var(--ink-2)}
+.entry p{font-size:24px;margin:2px 0 0;overflow-wrap:anywhere}
+
+.vhs{position:fixed;right:clamp(16px,3vw,32px);bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:30;font-size:28px;color:var(--paper);background:var(--ink);padding:2px 10px;line-height:1.1;font-variant-numeric:tabular-nums}
+
+@media (max-width:900px){
+  .ghost{width:100vw;height:75vh;opacity:.45;-webkit-mask-image:linear-gradient(180deg,#000 30%,transparent 100%);mask-image:linear-gradient(180deg,#000 30%,transparent 100%)}
+  .home,.gb{grid-template-columns:1fr}
+  nav ul{justify-content:flex-start}
+  .osd .push{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="ghost" aria-hidden="true"><img id="ghost-img" src="bg.jpg" alt=""></div>
+<div class="scan" aria-hidden="true"></div>
+<div class="vhs" aria-hidden="true">▶ <span id="tc">0:00:00</span></div>
+
+<div class="page">
+  <div class="osd" aria-hidden="true"><span class="rec">REC</span><span>SP</span><span>CH 03</span><span id="date">OCT. 01 2026</span><span class="push">SÁTÁNTANGÓ · 6 CANALES</span></div>
+  <div class="logo" id="logo"><a href="#inicio" aria-label="Sátántangó, ir al inicio"><canvas id="logo-c" aria-hidden="true"></canvas><span class="logo-txt">sátántangó</span></a></div>
+
+  <nav aria-label="Secciones">
+    <ul>
+      <li><a href="#inicio">I inicio</a></li>
+      <li><a href="#fotos">II fotos</a></li>
+      <li><a href="#pensamientos">III pensamientos</a></li>
+      <li><a href="#lecturas">IV lecturas</a></li>
+      <li><a href="#favoritos">V favoritos</a></li>
+      <li><a href="#visitas">VI libro de visitas</a></li>
+    </ul>
+  </nav>
+
+<main>
+<!-- I. INICIO -->
+<section data-page="inicio">
+  <div class="home">
+    <div class="col">
+      <div>
+        <p class="osd-h">CH 01 · frase</p>
+        <p class="quote" id="quote">de mi cuerpo descompuesto crecerán las flores, y yo estaré en ellas. eso es eternidad.</p>
+        <div class="quote-by" id="quote-by">— edvard munch</div>
+      </div>
+
+      <figure class="still">
+        <img src="flor.jpg" alt="Un tulipán rojo con la herida cerrada con alfileres">
+        <span class="ov ov-tl">‖ PAUSA</span>
+        <span class="ov ov-bl">foto de la semana</span>
+        <span class="ov ov-br">CH 01 · 00:03:33</span>
+      </figure>
+
+      <div class="pair">
+        <div class="latest">
+          <p class="osd-h">última firma</p>
+          <p class="txt" id="last-sign">nadie firmó todavía.</p>
+          <a class="go" href="#visitas">firmar el libro ▸</a>
+        </div>
+        <div class="counter"><span>sos el visitante nº</span><b id="visits">000001</b></div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div>
+        <p class="osd-h" id="np-h">escuchando ahora</p>
+        <a class="now" id="np" href="https://www.last.fm/user/swamito" target="_blank" rel="noopener">
+          <img id="np-img" src="thumbs/hospice.jpg" alt="">
+          <div>
+            <div class="k" id="np-k">● SINTONIZANDO…</div>
+            <div class="s" id="np-s">Kettering</div>
+            <div class="a" id="np-a">The Antlers</div>
+          </div>
+        </a>
+      </div>
+
+      <div class="latest">
+        <p class="osd-h">último pensamiento</p>
+        <p class="osd-sub">01.10 · 04:18</p>
+        <p class="txt">conchadelalora 4am y sigo haciendo la página con claude</p>
+        <a class="go" href="#pensamientos">ver todos ▸</a>
+      </div>
+
+      <div>
+        <p class="osd-h">shuffle · autorretrato</p>
+        <div class="shuffle">
+          <div class="sh-n" id="sh-n">#047</div>
+          <div class="sh-t" id="sh-t">Reckoner</div>
+          <div class="sh-a" id="sh-a">Radiohead</div>
+          <button type="button" class="sign" id="sh-btn">OTRO TEMA ▸▸</button>
+        </div>
+      </div>
+
+      <div>
+        <p class="osd-h">ahora mismo</p>
+        <dl class="ahora">
+          <dt>mirando</dt><dd>monstruos: la historia de lizzie borden</dd>
+          <dt>jugando</dt><dd>red dead redemption</dd>
+          <dt>obsesionado con</dt><dd>una wacha de la otra comisión</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+
+  <div class="stop">
+    <span>■ STOP · FIN DE LA CINTA</span>
+    <a href="#inicio" id="rew">◀◀ REBOBINAR</a>
+  </div>
+</section>
+
+<!-- II. FOTOS -->
+<section data-page="fotos" hidden>
+  <p class="osd-h">CH 02</p>
+  <div class="head"><h2 class="title">fotos</h2><p class="lede">Ropa, objetos, lugares y cosas que me gustan.</p></div>
+  <div class="collage" id="board"></div>
+  <p class="note">El orden cambia cada vez que entrás. Tocá una foto para verla grande.</p>
+  <div class="viewer" id="viewer" hidden><img id="viewer-img" alt=""><span class="ov">▶ PLAY · tocá para cerrar</span></div>
+</section>
+
+<!-- III. PENSAMIENTOS -->
+<section data-page="pensamientos" hidden>
+  <p class="osd-h">CH 03</p>
+  <div class="head"><h2 class="title">pensamientos</h2><p class="lede">Cosas que me pasan, en el momento en que me pasan.</p></div>
+  <div class="feed"><article class="post">
+    <time>01.10.2026 · 04:18</time>
+    <p>conchadelalora 4am y sigo haciendo la página con claude</p>
+  </article></div>
+</section>
+
+<!-- IV. HISTORIAS -->
+<section data-page="lecturas" hidden>
+  <p class="osd-h">CH 04</p>
+  <div class="head"><h2 class="title">lecturas</h2><p class="lede">Textos largos, para leer con calma.</p></div>
+  <div class="tabs" role="tablist" aria-label="Tipo de lectura">
+    <button role="tab" id="tab-cuentos" aria-selected="true" aria-controls="panel-cuentos">cuentos</button>
+    <button role="tab" id="tab-historias" aria-selected="false" aria-controls="panel-historias">historias</button>
+  </div>
+  <div id="panel-cuentos" role="tabpanel" aria-labelledby="tab-cuentos">
+    <ol class="index" id="cuentos-list"></ol>
+    <article class="reader" id="reader" hidden>
+      <a class="go back" href="#lecturas">◀◀ volver a cuentos</a>
+      <p class="osd-h" id="r-meta"></p>
+      <h3 class="r-title" id="r-title"></h3>
+      <div class="r-body" id="r-body"></div>
+      <div class="r-end">■ FIN · <a href="#lecturas">volver a cuentos</a></div>
+    </article>
+  </div>
+  <div id="panel-historias" role="tabpanel" aria-labelledby="tab-historias" hidden>
+    <div class="empty"><b>Todavía no hay historias.</b>Pronto.</div>
+  </div>
+</section>
+
+<!-- V. FAVORITOS -->
+<section data-page="favoritos" hidden>
+  <p class="osd-h">CH 05</p>
+  <div class="head"><h2 class="title">favoritos</h2><p class="lede">Un top irregular. Cada lista tiene el largo que tiene que tener.</p></div>
+  <div class="favs">
+    <div class="fav songs-col">
+      <h3>canciones <small>TOP 10</small></h3>
+      <ol id="songs"></ol>
+      <div class="more-wrap">
+        <button class="more" id="more" aria-expanded="false" aria-controls="pop" title="ver el top completo">...</button>
+        <div class="pop" id="pop" hidden role="dialog" aria-label="autorretrato, top 100 y un poquito más">
+          <header><b>autorretrato</b><span>top 100 y un poquito más · tocá afuera para cerrar</span></header>
+          <ol id="all"></ol>
+          <footer><a href="https://open.spotify.com/playlist/2Ct6G8Dh3rq9YZRdJGydRX" target="_blank" rel="noopener">+18 más · escuchala entera en spotify ▸</a></footer>
+        </div>
+      </div>
+    </div>
+    <div class="fav"><h3>álbumes <small>TOP 5</small></h3><ol id="albums"></ol></div>
+    <div class="fav"><h3>películas <small>TOP 6</small></h3><ol id="films"></ol></div>
+    <div class="fav"><h3>series <small>TOP 7</small></h3><ol id="series"></ol></div>
+    <div class="fav"><h3>juegos <small>TOP 6</small></h3><ol id="games"></ol></div>
+  </div>
+</section>
+
+<!-- VI. LIBRO DE VISITAS -->
+<section data-page="visitas" hidden>
+  <p class="osd-h">CH 06</p>
+  <div class="head"><h2 class="title">libro de visitas</h2><p class="lede">Dejá tu firma. El nombre es obligatorio.</p></div>
+  <div class="gb"><form id="gbform" novalidate>
+    <label for="gb-name">NOMBRE <em>* obligatorio</em>
+      <input id="gb-name" name="name" maxlength="40" autocomplete="nickname">
+    </label>
+    <label for="gb-msg">MENSAJE
+      <textarea id="gb-msg" name="msg" maxlength="500"></textarea>
+    </label>
+    <div class="err" id="gb-err" role="alert"></div>
+    <button class="sign" type="submit">FIRMAR ▸</button>
+  </form>
+  <div class="gb-list">
+    <p class="osd-h" id="gb-count">0 FIRMAS</p>
+    <div id="entries"><p class="note" id="gb-empty" style="margin-top:8px">Nadie firmó todavía. La primera firma va a quedar acá.</p></div>
+  </div></div>
+  <p class="note">Versión de prueba: las firmas se ven pero todavía no se guardan. Cuando la página esté en internet, quedan guardadas y nadie puede borrarlas ni editarlas.</p>
+</section>
+</main>
+</div>
+
+<script>
+const M=["･－･･ ･ － ･･ － －－･ －－－","･ ･－･ ･－ ･･･ ･ －･･"];
+const top10=[
+ ["Atrophy","The Antlers","hospice"],["Kettering","The Antlers","hospice"],[M[0],M[1],"STATIC",1],
+ ["Mojo Pin","Jeff Buckley","grace"],["Weird Fishes / Arpeggi","Radiohead","inrainbows"],["大石碎胸口","萬能青年旅店","oyts"],
+ ["Codex","Radiohead","kol"],["Dawn Chorus","Thom Yorke","anima"],["Long Season","Fishmans","longseason"],
+ ["All Flowers in Time Bend Towards the Sun","Jeff Buckley & Elizabeth Fraser","jeff"]];
+const albums=[["Hospice","The Antlers","hospice"],["Grace","Jeff Buckley","grace"],["OK Computer","Radiohead","okc"],["In Rainbows","Radiohead","inrainbows"],["The Glow Pt. 2","The Microphones","glow"]];
+const films=[["El Gran Hotel Budapest","Wes Anderson","gbh"],["The Royal Tenenbaums","Wes Anderson","tenen"],["Isla de perros","Wes Anderson","isle"],["The Lighthouse","Robert Eggers","light"],["The French Dispatch","Wes Anderson","french"],["Backrooms","Kane Parsons","back"]];
+const series=[["Lost","","lost"],["Attack on Titan","","aot"],["La maldición de Hill House","","hill"],["La caída de la casa Usher","","usher"],["La maldición de Bly Manor","","bly"],["Arcane","","ARC"],["Dirk Gently","","dirk"]];
+const games=[["The Walking Dead 2","","twd2"],["Zelda: Breath of the Wild","","botw"],["The Walking Dead 4","","twd4"],["Red Dead Redemption 2","","rdr2"],["Beyond: Two Souls","","beyond"],["Valorant","","valo"]];
+const rest=`I Want Someone Badly|Jeff Buckley, Shudder to Think
+Duvet|bôa
+do i clench my fists?|ridgeclub
+Beleza Pura|Masayoshi Takanaka
+Lover, You Should've Come Over|Jeff Buckley
+touched|my bloody valentine
+Two Horses|Black Country, New Road
+Alma|Gustavo Cerati
+Runway Houses City Clouds|Tame Impala
+The Place Where He Inserted the Blade|Black Country, New Road
+Grace|Jeff Buckley
+The Moon Cave|Gorillaz
+Call It Fate, Call It Karma|The Strokes
+Us and Them|Pink Floyd
+The Moon|The Microphones
+Workin' Day and Night|Michael Jackson
+i only said|my bloody valentine
+I Learned It From You|Wye Oak
+Headless Horseman|The Microphones
+Unmade|Thom Yorke
+Thirteen|The Antlers
+ode to rahsaan|berlioz
+Blind Spots|C418
+The Less I Know the Better|Tame Impala
+Regret|Wye Oak
+Last of a Dying Breed|Joji
+Glass Eyes|Radiohead
+Off the Wall|Michael Jackson
+Don't Stop 'Til You Get Enough|Michael Jackson
+Wake|The Antlers
+Suspirium|Thom Yorke
+Reckoner|Radiohead
+The Great Gig in the Sky|Pink Floyd
+How to Disappear Completely|Radiohead
+Let It Happen|Tame Impala
+Bread Song|Black Country, New Road
+Teleharmonic|The Smile
+Neighborhood #1 (Tunnels)|Arcade Fire
+The Tourist|Radiohead
+I Want You Back|The Jackson 5
+Exit Music (For a Film)|Radiohead
+The Sound of Myself|Disasterpeace
+21st Century Schizoid Man|King Crimson
+Electioneering|Radiohead
+Paranoid Android|Radiohead
+Chaos Space Marine|Black Country, New Road
+Civilian|Wye Oak
+Nancy Tries to Take the Night|Black Country, New Road
+Holy, Holy|Geordie Greep
+The Court of the Crimson King|King Crimson
+The Fool|Neutral Milk Hotel
+when you sleep|my bloody valentine
+Nude|Radiohead
+Time|Pink Floyd
+Los dientes|Los Mil Jinetes
+Motorbike|Geordie Greep
+Eclipse|Pink Floyd
+"Heroes"|David Bowie
+Clementine|Sarah Jaffe
+Bocanada|Gustavo Cerati
+Tabú|Gustavo Cerati
+Dust It Off|The Dø
+Wanna Be Startin' Somethin'|Michael Jackson
+Milk and Honey|Wye Oak
+Map|The Microphones
+only shallow|my bloody valentine
+The Poet's Inner World|Aram Bajakian
+Present Tense|Radiohead
+Starman|David Bowie
+Last I Heard (...He Was Circling the Drain)|Thom Yorke
+Hallelujah|Jeff Buckley
+Métamorphose|PAON
+Who's Lovin' You|The Jackson 5
+Good Old-Fashioned Lover Boy|Queen
+Wet Hands|C418
+I Heard It Through the Grapevine|The Slits
+Sound and Vision|David Bowie
+These Days|Nico
+Besties|Black Country, New Road
+Wolves|Phosphorescent
+TAIDADA|ZUTOMAYO
+Fourth of July|Sufjan Stevens
+Sweden|C418
+Blues|Geordie Greep
+The Pioneers (M83 Remix)|Bloc Party
+Eleanor Rigby|The Beatles
+Samurai Sword|The Microphones
+Milton's Tower|Allan Näslund
+Fuel to Fire|Agnes Obel
+On a Grassy Knoll (We'll Bow Together)|Tapir!`.split("\n").map(l=>l.split("|"));
+
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const pad=n=>String(n).padStart(2,"0");
+const thumb=k=>k==="STATIC"?`<span class="th static" aria-hidden="true"></span>`:/^[a-z0-9]+$/.test(k)?`<img class="th" src="thumbs/${k}.jpg" alt="" loading="lazy">`:`<span class="th txt" aria-hidden="true">${esc(k)}</span>`;
+const row=(i,[t,by,k,m])=>`<li><span class="n">${pad(i)}</span>${thumb(k)}<span><span class="t${m?" morse":""}">${esc(t)}</span>${by?` <span class="by${m?" morse":""}">— ${esc(by)}</span>`:""}</span></li>`;
+
+document.getElementById("songs").innerHTML=top10.map((s,i)=>row(i+1,s)).join("");
+document.getElementById("all").innerHTML=rest.map((s,i)=>`<li><span class="n">${i+11}</span><span>${esc(s[0])} <i>— ${esc(s[1])}</i></span></li>`).join("");
+[["albums",albums],["films",films],["series",series],["games",games]].forEach(([id,l])=>document.getElementById(id).innerHTML=l.map((s,i)=>row(i+1,s)).join(""));
+
+/* ---- safe storage (per-visitor memory of what was shown last) ---- */
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+function pickNew(len,key){const prev=+store.get(key);let i=Math.floor(Math.random()*len);if(len>1&&i===prev)i=(i+1)%len;store.set(key,i);return i}
+
+/* ---- backgrounds + matching palettes: one is picked per visit ---- */
+const THEMES=[
+  {img:"bg.jpg",            pos:"50% 30%", ink:"#1c17c9",ink2:"#7b78c4",line:"#d9d8f2",red:"#e3001b"},
+  {img:"fondos/bn-cara.jpg",      pos:"62% 50%", ink:"#141414",ink2:"#8a8a8a",line:"#e3e3e3",red:"#e3001b"},
+  {img:"fondos/cara-verde.jpg",   pos:"40% 45%", ink:"#0f4645",ink2:"#6e9a98",line:"#d6e7e5",red:"#e8551a"},
+  {img:"fondos/angel333.jpg",     pos:"45% 30%", ink:"#0b3550",ink2:"#6a93aa",line:"#d5e5ee",red:"#0a8fb5"},
+  {img:"fondos/pelo-amarillo.jpg",pos:"72% 30%", ink:"#2e3800",ink2:"#8b9440",line:"#eef0cc",red:"#5e9e00"},
+  {img:"fondos/frutilla.jpg",     pos:"50% 50%", ink:"#8c0a14",ink2:"#c27a7f",line:"#f5dcdd",red:"#2f6b1e"},
+  {img:"fondos/camara.jpg",       pos:"28% 55%", ink:"#1b3f42",ink2:"#7ea1a2",line:"#dae8e8",red:"#2a8ea6"},
+  {img:"fondos/auto-rojo.jpg",    pos:"32% 35%", ink:"#a3121c",ink2:"#b88c6c",line:"#f1e3d6",red:"#4c7d18"},
+  {img:"fondos/hornalla.jpg",     pos:"50% 45%", ink:"#0d2a7a",ink2:"#6f86b8",line:"#dae2f2",red:"#1d6bff"}
+];
+const theme=THEMES[pickNew(THEMES.length,"st-theme")];
+const R=document.documentElement.style;
+R.setProperty("--ink",theme.ink);R.setProperty("--ink-2",theme.ink2);R.setProperty("--line",theme.line);R.setProperty("--red",theme.red);
+const gi=document.getElementById("ghost-img");gi.src=theme.img;gi.style.objectPosition=theme.pos;
+
+/* ---- quotes: a different one each visit ---- */
+const QUOTES=[
+ ["de mi cuerpo descompuesto crecerán las flores, y yo estaré en ellas. eso es eternidad.","edvard munch"],
+ ["así se ve mi vida, desde el vacío y sin muchas palabras."],
+ ["no voy a permitir deseo que valga más que una flor."],
+ ["dios no separa lo que ha unido el hombre."],
+ ["he sido inmortal una vida."],
+ ["un día no va a quedar piedra sobre piedra."],
+ ["queremos que las máquinas sean humanos y que los humanos sean máquinas."],
+ ["en su beso saboreé la revolución."],
+ ["no voy a pedir permiso, las alas son mías y el cielo no es de nadie."],
+ ["es como un charco que cree que el pozo en el que está fue hecho exactamente con su forma."],
+ ["ojo por ojo y el mundo se quedará ciego."],
+ ["las lágrimas son el límite del lenguaje."],
+ ["cada hueso de tu cuerpo solía pertenecer a algo suave, lo recuerdo."],
+ ["dios está muerto, junto con toda su naturaleza."],
+ ["mi corazón tiene forma de daga con mango en tu mano."],
+ ["lego a la oscuridad todo, y a la eternidad nada."],
+ ["no hay moneda que no sea símbolo de las monedas.","borges, el zahir"],
+ ["antes yo me figuraba el anverso y después el reverso; ahora, veo simultáneamente los dos.","borges, el zahir"],
+ ["para perderse en dios, los sufíes repiten su propio nombre o los noventa y nueve nombres divinos hasta que éstos ya nada quieren decir.","borges, el zahir"],
+ ["¿cuál será un sueño y cuál una realidad, la tierra o el zahir?","borges, el zahir"],
+ ["quizá detrás de la moneda esté dios.","borges, el zahir"],
+ ["el hombre es el lobo del hombre.","hobbes"],
+ ["mi estado no reconoce lo táctil."]
+];
+const q=QUOTES[pickNew(QUOTES.length,"st-quote")];
+document.getElementById("quote").textContent=q[0];
+const qb=document.getElementById("quote-by");qb.textContent=q[1]?"— "+q[1]:"";qb.hidden=!q[1];
+
+/* ---- photos (newest first in this list) ---- */
+const FOTOS=[
+ ["cadenas-nieve","Pies descalzos con grilletes en la nieve"],
+ ["adidas-superlight","Botines Adidas Superlight negros"],
+ ["zapatillas-marrones","Zapatillas de cuero marrón"],
+ ["conejo","Conejo con moño: que fue ese pensamiento extraño, tengo miedo"],
+ ["nuca-sonrisa","Una nuca y una sonrisa con un diente separado"],
+ ["caras","Dos caras en blanco y negro granulado"],
+ ["bolso-shibuya","Bolso de cuero con un tigre, St-Shibuya"],
+ ["campera-gaultier","Campera estampada de Jean Paul Gaultier"],
+ ["pantalon-rayas","Pantalón ancho a rayas azul y beige"],
+ ["chaqueta-mexico","Chaqueta bordada antigua, Godard tailleur México"],
+ ["chica-rosa","Chica con vestido rosa en un living"],
+ ["arana","Una araña en su tela, de noche"]
+];
+const mixed=[...FOTOS].sort(()=>Math.random()-.5);
+const rnd=(a,b)=>a+Math.random()*(b-a);
+document.getElementById("board").innerHTML=mixed.map(([f,alt])=>`<button type="button" data-src="fotos/${f}.jpg" style="width:min(100%,${Math.round(rnd(170,330))}px);transform:rotate(${rnd(-4,4).toFixed(1)}deg) translateY(${Math.round(rnd(-14,22))}px)"><img src="fotos/${f}.jpg" alt="${esc(alt)}" loading="lazy"></button>`).join("");
+const viewer=document.getElementById("viewer"),vimg=document.getElementById("viewer-img");
+document.getElementById("board").addEventListener("click",e=>{const b=e.target.closest("button[data-src]");if(!b)return;vimg.src=b.dataset.src;vimg.alt=b.querySelector("img").alt;viewer.hidden=false});
+viewer.addEventListener("click",()=>viewer.hidden=true);
+document.addEventListener("keydown",e=>{if(e.key==="Escape")viewer.hidden=true});
+
+/* ---- pixel wordmark: drawn small, scaled up with hard pixels ---- */
+async function drawLogo(){
+  try{await document.fonts.load('16px "VT323"')}catch(e){}
+  const c=document.getElementById("logo-c"),x=c.getContext("2d"),fs=56,txt="SÁTÁNTANGÓ";
+  const F=`${fs}px "VT323", monospace`;x.font=F;const m=x.measureText(txt);
+  const asc=Math.ceil(m.actualBoundingBoxAscent||fs)+1,desc=Math.ceil(m.actualBoundingBoxDescent||3)+1,w=Math.ceil(m.width)+8,h=asc+desc;
+  c.width=w;c.height=h;
+  const layer=(col,dx)=>{const o=document.createElement("canvas");o.width=w;o.height=h;const ox=o.getContext("2d");ox.font=F;ox.fillStyle=col;ox.textBaseline="alphabetic";ox.fillText(txt,4+dx,asc);
+    const d=ox.getImageData(0,0,w,h);for(let i=3;i<d.data.length;i+=4)d.data[i]=d.data[i]>110?255:0;ox.putImageData(d,0,0);return o};
+  x.globalAlpha=.38;x.drawImage(layer(theme.red,3),0,0);x.drawImage(layer(theme.ink2,-3),0,0);x.globalAlpha=1;x.drawImage(layer(theme.ink,0),0,0);
+}
+drawLogo();
+
+
+const CUENTOS=[{"slug": "aquel-que-suena", "title": "aquél que sueña", "paras": ["soy una forma de vida que sólo comprende su existencia cuando duerme. Algo que no es alguien, y alguien que no existe. Vago por el universo que sé que es finito —tanto como una vida y tanto como una muerte— para buscar algo, aunque todavía no sé qué. quizás un Dios, quizás un sol o un planeta, quizás sólo un hombre. He pasado tanto tiempo intentando recordarlo, que sólo acepté que nunca lo haré, acepté que sólo sabré lo que he buscado en el momento en que deba hacerlo. En este universo nada se deja al azar, todo es simétrico. Un día, hace tanto tiempo que sólo los más longevos satélites podrían recordar, en la “vasta” infinitud del universo —según los humanos—, comencé a existir. Los átomos se juntaron, las moléculas se formaron alrededor de mí. y por sí mismos, crearon un gran cerebro, yo fui engendrado de polvo y vacío; el propio universo, tan bello como es, creó su propia conciencia. Quizás se sentía sola y abandonada; tan sola que pasó miles de millones de años esperándome, intentando crearme, hacer que un cerebro tal como lo soy yo aparezca en su seno por pura probabilidad. Dicen —los hombres de la teoría— que si una mota de polvo se abandona al tiempo —ese dios invisible—, ella cumplirá su ciclo secreto. Será flor y será semilla; será también tierra, y agua, y quizá espejo. En su infinitesimal destino repetirá la vastedad del mundo. Al final, cuando haya sido todas las cosas, volverá a su condición primera: una simple mota de polvo, que acaso contiene —como el universo— la promesa de serlo todo otra vez.", "Desde entonces, me limité a ser el espectador que el universo requería. No podía ver, no podía oír, no podía sentir, pero sí podía existir. En el único momento que podría decir que lo estaba haciendo era cuando imaginaba que lo hacía, cuando vivía sólo en mis propios pensamientos, y cuando soñaba. Con el tiempo, ya no deseé más; no necesitaba ver, no necesitaba oír, ni tampoco sentir, sólo necesitaba mi propia mente, y mis sueños. Hubo uno que se repitió durante años. En él, me descubría suspendido sobre una claridad temblorosa, como si el aire fuera también agua y el sol, una criatura viva. Mi cuerpo —si es que era mío— era leve, apenas una vibración que se sostenía en el movimiento. Sentía el impulso de subir, de descender, de trazar círculos sobre la superficie de un estanque invisible. No había miedo, sólo un júbilo silencioso, un orden perfecto que no necesitaba pensamiento. Por mucho tiempo ignoré lo que era aquello. No había palabra en mi mente para nombrarlo. Sólo después, ya despierto y entre los hombres, supe que ese ser de mi sueño tenía un nombre antiguo y cristalino. Hoy lo llaman alguacil. Yo, entonces, sólo conocía su eternidad. Después de tanto tiempo vagando solo por la inmensidad de lo que me gusta llamar: madre. Encontré algo que, al principio no llamó mi atención por mucho tiempo. Pero al ver pasar los siglos por ese bello planeta verde, me encontré fascinado, y sobre todo, identificado: encontré vida. Al inicio, sólo veía semillas luchando por crecer en roca negra, supe que nunca había visto algo como ello, y no me refiero a los bellos caparazones en los cuáles se guarda la información para crear los robles, hablo de su insistencia por vivir; y tan sólo eso marcó la diferencia entre el resto de planetas que tanto han intentado y tanto han fracasado. Esa pequeña semilla lo logró. Con el paso de los años, vi nacer la conciencia en condiciones que no me parecían posibles, vi cómo ellos salían del mar a sobrevivir a la selva. Vi sus incontables extinciones y resurrecciones. Y con el tiempo me encontré obsesionado con una forma de vida en específico: los hombres. En ellos encontré una quietud que nunca había sentido: vi cerebros como el mío, pero guardados dentro de cajas de carne y piel, seguros para que nadie los penetre. Vi el inicio de su civilización, sus primeras escrituras, sus primeras pinturas… vi su barbarie y su compasión, vi guerras y vi amor. Ellos eran como lo era yo, pero tan efímeros… los sentí como hermanos pequeños, ambos hijos de la misma madre. Me dio tanta ternura cuando los tiernos e indefensos humanos comenzaron a levantar edificios, buscando tocar el cielo con las manos. Y en el crudo caos matutino del nuevo mundo vi algo que recordaba haber visto antes muchas veces: un alguacil.", "Su vuelo era una escritura indecible sobre el aire, un signo antiguo que mi memoria —o lo que queda de ella— reconoció con un estremecimiento. Comprendí entonces que aquel sueño que me había acompañado durante siglos no era un delirio, sino una advertencia, o acaso un recuerdo de algo que fui antes de saber lo que era ser. El alguacil avanzó entre los reflejos del amanecer, y por un instante, el mundo entero pareció repetirse en el parpadeo de sus alas.", "Nunca supe si eso era lo que buscaba. Pero sí sé mi infinito destino. Sé que seré alguacil, sé que seré hombre, sé que seré espejo como sé que seré flor, semilla, tierra y agua, también seré una simple mota de polvo flotando por el espacio. Algún día sé que volveré a ser yo, una forma de vida que sólo comprende su existencia cuando duerme."], "words": 900}, {"slug": "evangelio-apocrifo", "title": "fragmento de un evangelio apócrifo", "paras": ["Yo he creado este mundo. No por necesidad —los dioses no la conocen— sino por una inclinación más antigua que el tiempo, una pulsión semejante al aburrimiento o a la soledad. Creé este mundo para sentir algo que se pareciera al control; para destruirlo si así lo quisiera; para ser testigo de un orden que sólo pudiera existir mientras yo lo pensara. Y así, en un acto que no fue de amor ni de crueldad, sino de curiosidad, tracé la sustancia de las cosas, los límites del aire, las leyes de la distancia y del silencio.", "Al principio no había más que la quietud. El mundo, recién nacido, no sabía todavía del sonido ni del paso del tiempo. Cada piedra era idéntica a sí misma; el agua no conocía el reflejo; el cielo no sabía del azul. Me complacía esa armonía inmóvil, esa pureza sin espectadores. Pero comprendí —aunque esa palabra sea una concesión humana— que el orden perfecto es apenas otra forma del vacío. Ningún mundo puede subsistir en la pura contemplación. Así que, sin saberlo, engendré la imperfección.", "Fue entonces cuando apareció el movimiento. Y con él, el tiempo. Los ríos comenzaron a fluir, las sombras a huir de sí mismas, las estrellas a repetirse. Yo observaba, fascinado, cómo mi creación empezaba a desconocerme. En los repliegues de esa materia recién viva, en el murmullo que antecede al lenguaje, surgió algo que no había previsto: la conciencia, como síndrome del tiempo.", "No podría decir si lo inventé o si me fue impuesto. Lo cierto es que, una mañana —aunque la palabra “mañana” no tenía sentido aún— encontré a un hombre. No sé si fue el primero o el último. Estaba de pie, desnudo, bajo una luz que no proyectaba sombras. Me miró sin miedo, como quien contempla un sueño que no termina de recordar. Había en su rostro una pregunta que ni siquiera él conocía.", "Durante un tiempo —si el tiempo puede medirse en pensamientos— lo observé. Caminaba entre las cosas como si las hubiera soñado. Tocaba el agua, los árboles, la arena, con un asombro que rozaba la devoción. Yo lo veía nombrar lo que veía, y su voz hacía que las cosas fueran más reales que antes. Supe entonces que, al darle lenguaje, había creado algo más grande que la materia: el error. Porque cada nombre era una traición, una distancia entre lo que es y lo que se dice.", "Fue ahí cuando, al sentarme frente a ese hombre, tan extraño para mí; al mirarlo como a un niño, y él mirarme como a un semejante —la primera vez que un dios fue mirado de igual a igual—, comprendí algo que ni siquiera había buscado. Yo, que había planeado el principio y el fin, no había previsto la gratitud. Y sin embargo, él me habló. No pidió nada, no imploró. Sólo dijo: “gracias.”", "Esa palabra —tan pequeña, tan humana— alteró el orden del mundo más que cualquier cataclismo. Entendí, con un horror sereno, que había creado seres capaces de agradecer incluso su propia prisión. Y que ese agradecimiento era la forma más pura del amor. Desde entonces los amé. Los amé no por lo que eran, sino por lo que creían ser. Los amé porque me habían inventado también a mí, dándome una forma, un nombre, una necesidad. Los amé, y ellos me amaron. Pero comprendí pronto que el amor es una forma de servidumbre, y que ningún ser puede sostenerlo sin corromperlo. Los humanos no están hechos para la libertad: el deseo de ser libres los destruye, como el fuego destruye al aire que lo alimenta. Por eso, para que no se consumieran en su anhelo, creé la muerte. No como castigo, sino como tregua. Un umbral hacia el descanso, una forma imperfecta de perdón.", "Desde entonces, mi creación se repite. Los hombres nacen, temen, aman, mueren. Olvidan que alguna vez los soñé. Y yo, que los soñé, comienzo a dudar también: ¿acaso no fui soñado por ellos? Tal vez, en algún remoto reflejo del tiempo, un hombre imagine a su creador con el mismo asombro con el que yo lo vi por primera vez.", "Y cuando lo haga, cuando ese pensamiento se repita en otro ciclo, alguien —hombre o dios, sueño o palabra— volverá a decir “gracias”. Y el mundo, otra vez, comenzará."], "words": 719}, {"slug": "peregrino", "title": "el peregrino, su dios, y el rey de mi montaña decrépita", "paras": ["solía ver el mundo desde un punto muy alto. Era tan grande que ni los gansos sobrevolaban mi superficie, ellos me rodeaban. Mis pies eran de piedra antigua, y mi cabeza era de nieve. Mis arterias eran contenedoras de una sinfín cantidad de oro. Veía desde mi circunstancia tanto París como Guyana, y tanto la verdad de un hombre como su mentira.", "En mi condición no sería capaz de replicar a los farsantes que, durante años, contaron historias sobre mí. Todas eran falsas, menos una. Y sólo hay una persona que la pudo haber contado, porque sólo había una persona como yo. Quizás no fue ahora, sino antes, que comprendí: el bosque florece salvaje, no domesticado.", "la mañana en la que morí, aquél bello poniente mostraba sus figuras negras: El peregrino, su Dios y el rey de mi decrépita montaña, aunque aún no era mía —ni era yo—. El día anterior había osado disfrazar mi insulto de amabilidad a un hombre que sabía que nunca fueron mis ojos dichosos de verlo. Tenía la belleza innata de una mujer, la más bella; y una condición que provocaba a hasta los más insensibles hombres —como lo eran en la época— caer ante sus pies, según sus palabras era “dinero”. Algo de lo que mi aldea ignoraba, principalmente porque nunca lo habíamos oído, pero lo amamos como a un hijo. Antes de él, solíamos cambiar las cabras por siembras maduras, y con ella hacíamos el pan de cada mañana, y el queso añejaba durante meses dentro de las chozas de nuestros abuelos. Tiempos simples en una era nada moderna.", "recuerdo aún lo que le dije, lo que marcó un punto final entre la vida y la muerte. Eso que aún me persigue y lo hará hasta que la ciudad venga a escalarme y mi orgullo sea manchado, y aún después de la civilización e incluso de la vida. Lo toqué, lo miré y sin pensarlo bien, hablé: “lo siento”. En ese momento, e incluso después, no entendía por qué someterme al eterno retorno reconstruyéndome y destruyéndome de nuevo en el infierno. Ahora lo entiendo. Simplemente lo molesté. Si hubiera sabido en ese entonces lo que una palabra era capaz de hacer, hubiera vivido mi vida en silencio.", "aquél peregrino, o lo mismo, su Dios, o lo mismo, el rey de mi decrépita montaña, cayeron como sentencia sobre los ilustros infieles de Dios de los que se componía mi bella aldea. Decidieron cortar, sangrar, desangrar y desarmar sus cuerpos y cabezas como si de calabaza fueran hechos. Deshumanizaron la tierra y la arena, el suelo desapareció, en cambio, sólo había traición creciendo en él, y ya era imponente. Su martillo sentenciador cayó sobre mi cabeza como tortuga levantada por un águila.", "Creo que el peregrino, o su Dios, o el rey de mi decrépita montaña nunca existió, tanto como su sentencia. El dinero nos cambió, antes partíamos los chanchos en una danza familiar como uno, íbamos en grupos a cazar cuando las granjas estaban vacías y el agua del arroyo era pura. Luego, nos matamos por herencias que no nos merecían; aquél tiene más que yo, yo quiero lo que él tiene, pero mi envidia dura más que la felicidad de quién envidio. Aquellos hombres, me resulta lógico ahora, sólo vivían en nuestras cabezas, o en nuestras almas. Aquellos hombres —el peregrino, su Dios y el rey de mi decrépita montaña— nunca existieron. Crecieron salvajes dentro de nuestras mentes. Creía entonces, mientras aquél falso martillo sentenciador golpeaba mi mente, que el bello hombre con rostro de mujer también lo era. Pero luego de una eterna oscuridad y dolor, lo vi.", "lo vi, irreconocible frente a una estatua que parecía ser él en cierta forma. Qué habrán visto mis ojos que aquella formación humana de piedra sería tapada por una aterradora franja negra que sólo por mi trauma fui capaz de ver; acaso no era piedra, quizá fue carne, quizá esa solía ser mi carne.", "Ni sé su nombre ni su apellido —y creo que él tampoco lo sabía—, tampoco sé su pasado, y ciertamente no sé su futuro. Más obvio: no sé su cuerpo ni su rostro. Mis ojos sabían que él estaba ahí, pero mi mente lo encontraba trágico, imperpetuo; tanto así que ya no me era humano, me era más una cabra, un diablo. Aquella era la sentencia de nuestra envidia: el dinero."], "words": 731}, {"slug": "la-casa-durmiente", "title": "la casa durmiente", "paras": ["Alguien construyó aquella casa en una época que ya no existe; una casa que ya no se siente al tacto, pero aún, cuando la bruma duerme sobre el lago, se logra ver su fachada de piedra, sus columnas de madera y sus vidrios rotos. Desgastadas al pasar por mil tormentas son sus piedras, ya negras y con cien historias para contar. Aún, desde lejos, se pueden ver sus muebles en su interior tumbados en su suelo; y la chimenea con la esperanza de volver a humear.", "Sabía el poeta, lo que se encontraba al arrimarse a la propiedad. Monstruos hechos de carne y bruma. Criaturas heladas que roban piel y alma. “La muerte pálida como la nieve acecha la zona” decían. Mitos que no sólo los crédulos afirmaban, también los incrédulos con deseo de fama que “los vieron con sus ojos”, o al menos eso cuentan.", "Nadie supo que él desembarcó en aquella noche de rocío. Nadie supo que caminaría el bosque bajo sus árboles que lo cubrían de la helada como una cobija, ni que sus pasos serían borrados por sus propios fantasmas. Nadie supo que el poeta moriría esa noche, o en cualquier otra. Nadie sabía de dónde venía, algunos creían que era hijo del desierto, criado por arena, cactus y piedra; alimentado por el agua de la lluvia. Otros creían que lo era del hielo. Los más sagaces comprendían que su patria era el exilio, y que no había llegado a la casa: la casa lo había recordado.", "Ante ella, el poeta se detuvo. No tocó el umbral: comprendió que no era necesario. a veces basta con ser recordado para volver. La casa lo miraba, si es posible que una casa mire, y lo hacía con la serenidad de quién reconoce a su dueño, o a su prisionero. las aguas se aquietaron, y en esa quietud, él comprendió que la casa había esperado su regreso, o su invención.", "Quién sabe cuánto habrá naufragado el poeta. Quizás meses, más probable que hayan sido años; lo que se cree: décadas. y lo que los más sabios piensan: siglos. Pero él lo comenzó a sentir desde que bajó del bote, en ese momento comenzó a existir, cuando volvió a ver a su amor, rendido ante los cimientos de su propia creación, o quizás fue al revés.", "La casa deseaba cambiar su forma, darle recuerdos al poeta y a sí misma, para que sepa y para saber que fueron creados por alguien, no por ellos. Si no recuerda algo antes del arribo, si no recuerda algo antes de su ilusión sobre el lago. ¿existen en realidad? ¿o sólo son una ilusión del otro?", "Ambos esclavos de sí mismos, y entre sí. ambos esclavos que no desean ser libres, sino que quieren un esclavo; y encontraron esa quietud en el otro.", "Sin poder, sin estructura, sin pies, sin ventanas, sin ojos, sin muebles, sin columnas ni manos, sin errores y sin tacto. ¿cómo podrían ambos vivir si no existen?"], "words": 497}];
+const ROM=["I","II","III","IV","V","VI","VII","VIII","IX","X"];
+document.getElementById("cuentos-list").innerHTML=CUENTOS.map((c,i)=>{const first=c.paras[0].split(/(?<=[.])\s/)[0];return `<li><a href="#cuento-${c.slug}"><span class="num">${ROM[i]}</span><span class="nm">${esc(c.title)}</span><span class="ex">${esc(first.length>140?first.slice(0,140)+"…":first)}</span><span class="len">${c.words} palabras · ${Math.max(1,Math.round(c.words/200))} min</span></a></li>`}).join("");
+function showLecturas(slug,tab){
+  const tc=document.getElementById("tab-cuentos"),th=document.getElementById("tab-historias");
+  const pc=document.getElementById("panel-cuentos"),ph=document.getElementById("panel-historias");
+  const isH=tab==="historias";tc.setAttribute("aria-selected",!isH);th.setAttribute("aria-selected",isH);pc.hidden=isH;ph.hidden=!isH;
+  const r=document.getElementById("reader"),l=document.getElementById("cuentos-list");
+  const i=CUENTOS.findIndex(c=>c.slug===slug);
+  if(i<0){r.hidden=true;l.hidden=false;return}
+  const c=CUENTOS[i];
+  document.getElementById("r-meta").textContent=`cuento ${ROM[i]} · ${c.words} palabras`;
+  document.getElementById("r-title").textContent=c.title;
+  document.getElementById("r-body").innerHTML=c.paras.map(p=>`<p>${esc(p)}</p>`).join("");
+  l.hidden=true;r.hidden=false;
+}
+document.getElementById("tab-cuentos").addEventListener("click",()=>{location.hash="lecturas"});
+document.getElementById("tab-historias").addEventListener("click",()=>{location.hash="historias"});
+/* ---- escuchando ahora: last.fm (connected to spotify) ---- */
+const LFM={user:"swamito",key:"bafc249046ec8ad9fa8166873ebf0d03"};
+function ago(ts){const m=Math.round((Date.now()/1000-ts)/60);if(m<60)return `hace ${Math.max(1,m)} min`;const h=Math.round(m/60);if(h<24)return `hace ${h} h`;const d=Math.round(h/24);return `hace ${d} día${d>1?"s":""}`}
+async function nowPlaying(){
+  const K=document.getElementById("np-k"),S=document.getElementById("np-s"),A=document.getElementById("np-a"),I=document.getElementById("np-img"),H=document.getElementById("np-h");
+  try{
+    const r=await fetch(`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LFM.user}&api_key=${LFM.key}&format=json&limit=1`);
+    const j=await r.json();const t=j.recenttracks&&j.recenttracks.track&&j.recenttracks.track[0];
+    if(!t){K.textContent="■ SIN SEÑAL";S.textContent="todavía no sonó nada";A.textContent="";return}
+    const live=t["@attr"]&&t["@attr"].nowplaying==="true";
+    H.textContent=live?"escuchando ahora":"lo último que sonó";
+    K.textContent=live?"● EN VIVO":"‖ "+(t.date?ago(+t.date.uts):"hace un rato");
+    S.textContent=t.name;A.textContent=t.artist["#text"]||t.artist.name||"";
+    const img=(t.image||[]).map(i=>i["#text"]).filter(Boolean).pop();
+    if(img){I.src=img;I.alt="Tapa de "+(t.album&&t.album["#text"]||t.name)}
+  }catch(e){K.textContent="● EN VIVO · EJEMPLO"}
+}
+nowPlaying();setInterval(nowPlaying,30000);
+/* shuffle from autorretrato */
+const pool=[...top10.map((s,i)=>[i+1,s[0],s[1],s[3]]),...rest.map((s,i)=>[i+11,s[0],s[1]])];
+let last=-1;
+function shuffle(){let i;do{i=Math.floor(Math.random()*pool.length)}while(i===last);last=i;const [n,t,a,m]=pool[i];
+  document.getElementById("sh-n").textContent="#"+String(n).padStart(3,"0");
+  const T=document.getElementById("sh-t"),A=document.getElementById("sh-a");T.textContent=t;A.textContent=a;T.classList.toggle("morse",!!m);A.classList.toggle("morse",!!m)}
+document.getElementById("sh-btn").addEventListener("click",shuffle);shuffle();
+document.getElementById("rew").addEventListener("click",e=>{e.preventDefault();window.scrollTo({top:0,behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"})});
+/* top 100 */
+const more=document.getElementById("more"),pop=document.getElementById("pop");
+function setPop(o){pop.hidden=!o;more.setAttribute("aria-expanded",o)}
+more.addEventListener("click",e=>{e.stopPropagation();setPop(pop.hidden)});
+pop.addEventListener("click",e=>e.stopPropagation());
+document.addEventListener("click",()=>{if(!pop.hidden)setPop(false)});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!pop.hidden){setPop(false);more.focus()}});
+
+/* routing */
+const pages=[...document.querySelectorAll("section[data-page]")];
+function route(){
+  let h=(location.hash||"#inicio").slice(1),sub=null,tab="cuentos";
+  if(h.startsWith("cuento-")){sub=h.slice(7);h="lecturas"}
+  if(h==="historias"){tab="historias";h="lecturas"}
+  const id=pages.some(p=>p.dataset.page===h)?h:"inicio";
+  if(id==="lecturas")showLecturas(sub,tab);
+  pages.forEach(p=>p.hidden=p.dataset.page!==id);
+  document.querySelectorAll("nav a").forEach(a=>a.getAttribute("href")==="#"+id?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current"));
+  setPop(false);window.scrollTo(0,0);
+}
+addEventListener("hashchange",route);route();
+
+/* osd date + tape counter */
+const mo=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"],d0=new Date();
+document.getElementById("date").textContent=`${mo[d0.getMonth()]}. ${pad(d0.getDate())} ${d0.getFullYear()}  ${pad(d0.getHours())}:${pad(d0.getMinutes())}`;
+const t0=Date.now(),tc=document.getElementById("tc");
+setInterval(()=>{const s=Math.floor((Date.now()-t0)/1000);tc.textContent=`${Math.floor(s/3600)}:${pad(Math.floor(s/60)%60)}:${pad(s%60)}`},1000);
+
+/* guestbook (in-memory) */
+const f=document.getElementById("gbform"),nm=document.getElementById("gb-name"),msg=document.getElementById("gb-msg"),err=document.getElementById("gb-err");
+let n=0;
+f.addEventListener("submit",e=>{
+  e.preventDefault();
+  const name=nm.value.trim(),text=msg.value.trim();
+  if(!name){err.textContent="ESCRIBÍ TU NOMBRE PARA PODER FIRMAR";nm.focus();return}
+  if(!text){err.textContent="ESCRIBÍ UN MENSAJE";msg.focus();return}
+  err.textContent="";document.getElementById("gb-empty")?.remove();
+  const d=new Date(),when=`${pad(d.getDate())}.${pad(d.getMonth()+1)} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  document.getElementById("entries").insertAdjacentHTML("afterbegin",`<div class="entry"><div class="who"><span>${esc(name)}</span><time>${when}</time></div><p>${esc(text)}</p></div>`);
+  document.getElementById("last-sign").textContent=`${name}: "${text.length>80?text.slice(0,80)+"…":text}"`;
+  n++;document.getElementById("gb-count").textContent=n===1?"1 FIRMA":`${n} FIRMAS`;f.reset();
+});
+</script>
+</body>
+</html>
