@@ -157,6 +157,7 @@ h2.title{font-weight:400;text-transform:uppercase;font-size:clamp(56px,9vw,120px
 .th.txt{display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--paper);background:var(--ink)}
 .fav li,.pop li{text-transform:lowercase}
 .fav .t{font-size:24px;line-height:1.05;overflow-wrap:anywhere}
+.fav .alt{font-size:20px;color:var(--ink-2)}
 .fav .by{color:var(--ink-2)}
 .morse{letter-spacing:.08em}
 .songs-col{grid-column:1/-1}
@@ -396,8 +397,8 @@ const top10=[
  ["All Flowers in Time Bend Towards the Sun","Jeff Buckley & Elizabeth Fraser","jeff"]];
 const albums=[["Hospice","The Antlers","hospice"],["Grace","Jeff Buckley","grace"],["OK Computer","Radiohead","okc"],["In Rainbows","Radiohead","inrainbows"],["The Glow Pt. 2","The Microphones","glow"]];
 const films=[["The Grand Budapest Hotel","Wes Anderson","gbh"],["The Royal Tenenbaums","Wes Anderson","tenen"],["Isle of Dogs","Wes Anderson","isle"],["The Lighthouse","Robert Eggers","light"],["The French Dispatch","Wes Anderson","french"],["Backrooms","Kane Parsons","back"]];
-const series=[["Lost","","lost"],["進撃の巨人","","aot"],["The Haunting of Hill House","","hill"],["The Fall of the House of Usher","","usher"],["The Haunting of Bly Manor","","bly"],["Arcane","","ARC"],["Dirk Gently's Holistic Detective Agency","","dirk"]];
-const games=[["The Walking Dead: Season Two","","twd2"],["ゼルダの伝説 ブレス オブ ザ ワイルド","","botw"],["The Walking Dead: The Final Season","","twd4"],["Red Dead Redemption 2","","rdr2"],["Beyond: Two Souls","","beyond"],["Valorant","","valo"]];
+const series=[["Lost","","lost"],["進撃の巨人","","aot",0,"attack on titan"],["The Haunting of Hill House","","hill"],["The Fall of the House of Usher","","usher"],["The Haunting of Bly Manor","","bly"],["Arcane","","ARC"],["Dirk Gently's Holistic Detective Agency","","dirk"]];
+const games=[["The Walking Dead: Season Two","","twd2"],["ゼルダの伝説 ブレス オブ ザ ワイルド","","botw",0,"zelda breath of the wild"],["The Walking Dead: The Final Season","","twd4"],["Red Dead Redemption 2","","rdr2"],["Beyond: Two Souls","","beyond"],["Valorant","","valo"]];
 const rest=`I Want Someone Badly|Jeff Buckley, Shudder to Think
 Duvet|bôa
 do i clench my fists?|ridgeclub
@@ -492,7 +493,7 @@ On a Grassy Knoll (We'll Bow Together)|Tapir!`.split("\n").map(l=>l.split("|"));
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const pad=n=>String(n).padStart(2,"0");
 const thumb=k=>k==="STATIC"?`<span class="th static" aria-hidden="true"></span>`:/^[a-z0-9]+$/.test(k)?`<img class="th" src="thumbs/${k}.jpg" alt="" loading="lazy">`:`<span class="th txt" aria-hidden="true">${esc(k)}</span>`;
-const row=(i,[t,by,k,m])=>`<li><span class="n">${pad(i)}</span>${thumb(k)}<span><span class="t${m?" morse":""}">${esc(t)}</span>${by?` <span class="by${m?" morse":""}">— ${esc(by)}</span>`:""}</span></li>`;
+const row=(i,[t,by,k,m,alt])=>`<li><span class="n">${pad(i)}</span>${thumb(k)}<span><span class="t${m?" morse":""}">${esc(t)}</span>${alt?` <span class="alt">(${esc(alt)})</span>`:""}${by?` <span class="by${m?" morse":""}">— ${esc(by)}</span>`:""}</span></li>`;
 
 document.getElementById("songs").innerHTML=top10.map((s,i)=>row(i+1,s)).join("");
 document.getElementById("all").innerHTML=rest.map((s,i)=>`<li><span class="n">${i+11}</span><span>${esc(s[0])} <i>— ${esc(s[1])}</i></span></li>`).join("");
