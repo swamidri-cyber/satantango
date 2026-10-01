@@ -532,7 +532,7 @@ const QUOTES=[
  ["en su beso saboreé la revolución."],
  ["no voy a pedir permiso, las alas son mías y el cielo no es de nadie."],
  ["es como un charco que cree que el pozo en el que está fue hecho exactamente con su forma."],
- ["ojo por ojo y el mundo se quedará ciego."],
+ ["ojo por ojo y el mundo se quedará ciego.","gandhi"],
  ["las lágrimas son el límite del lenguaje."],
  ["cada hueso de tu cuerpo solía pertenecer a algo suave, lo recuerdo."],
  ["dios está muerto, junto con toda su naturaleza."],
@@ -548,7 +548,7 @@ const QUOTES=[
 ];
 const q=QUOTES[pickNew(QUOTES.length,"st-quote")];
 document.getElementById("quote").textContent=q[0];
-const qb=document.getElementById("quote-by");qb.textContent=q[1]?"— "+q[1]:"";qb.hidden=!q[1];
+const qb=document.getElementById("quote-by");qb.textContent="— "+(q[1]||"swami");
 
 /* ---- photos (newest first in this list) ---- */
 const FOTOS=[
