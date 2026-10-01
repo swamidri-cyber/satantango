@@ -155,6 +155,7 @@ h2.title{font-weight:400;text-transform:uppercase;font-size:clamp(56px,9vw,120px
 .static{background-color:#888;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='34' height='34'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.4' numOctaves='1'/><feColorMatrix values='0 0 0 1.4 -.2  0 0 0 1.4 -.2  0 0 0 1.4 -.2  0 0 0 0 1'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");animation:snow .25s steps(3) infinite}
 @keyframes snow{0%{background-position:0 0}33%{background-position:-11px 7px}66%{background-position:9px -13px}}
 .th.txt{display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--paper);background:var(--ink)}
+.fav li,.pop li{text-transform:lowercase}
 .fav .t{font-size:24px;line-height:1.05;overflow-wrap:anywhere}
 .fav .by{color:var(--ink-2)}
 .morse{letter-spacing:.08em}
@@ -390,13 +391,13 @@ button.sign:hover{background:var(--red)}
 const M=["･－･･ ･ － ･･ － －－･ －－－","･ ･－･ ･－ ･･･ ･ －･･"];
 const top10=[
  ["Atrophy","The Antlers","hospice"],["Kettering","The Antlers","hospice"],[M[0],M[1],"STATIC",1],
- ["Mojo Pin","Jeff Buckley","grace"],["Weird Fishes / Arpeggi","Radiohead","inrainbows"],["大石碎胸口","萬能青年旅店","oyts"],
+ ["Mojo Pin","Jeff Buckley","grace"],["Weird Fishes / Arpeggi","Radiohead","inrainbows"],["大石碎胸口","万能青年旅店","oyts"],
  ["Codex","Radiohead","kol"],["Dawn Chorus","Thom Yorke","anima"],["Long Season","Fishmans","longseason"],
  ["All Flowers in Time Bend Towards the Sun","Jeff Buckley & Elizabeth Fraser","jeff"]];
 const albums=[["Hospice","The Antlers","hospice"],["Grace","Jeff Buckley","grace"],["OK Computer","Radiohead","okc"],["In Rainbows","Radiohead","inrainbows"],["The Glow Pt. 2","The Microphones","glow"]];
-const films=[["El Gran Hotel Budapest","Wes Anderson","gbh"],["The Royal Tenenbaums","Wes Anderson","tenen"],["Isla de perros","Wes Anderson","isle"],["The Lighthouse","Robert Eggers","light"],["The French Dispatch","Wes Anderson","french"],["Backrooms","Kane Parsons","back"]];
-const series=[["Lost","","lost"],["Attack on Titan","","aot"],["La maldición de Hill House","","hill"],["La caída de la casa Usher","","usher"],["La maldición de Bly Manor","","bly"],["Arcane","","ARC"],["Dirk Gently","","dirk"]];
-const games=[["The Walking Dead 2","","twd2"],["Zelda: Breath of the Wild","","botw"],["The Walking Dead 4","","twd4"],["Red Dead Redemption 2","","rdr2"],["Beyond: Two Souls","","beyond"],["Valorant","","valo"]];
+const films=[["The Grand Budapest Hotel","Wes Anderson","gbh"],["The Royal Tenenbaums","Wes Anderson","tenen"],["Isle of Dogs","Wes Anderson","isle"],["The Lighthouse","Robert Eggers","light"],["The French Dispatch","Wes Anderson","french"],["Backrooms","Kane Parsons","back"]];
+const series=[["Lost","","lost"],["進撃の巨人","","aot"],["The Haunting of Hill House","","hill"],["The Fall of the House of Usher","","usher"],["The Haunting of Bly Manor","","bly"],["Arcane","","ARC"],["Dirk Gently's Holistic Detective Agency","","dirk"]];
+const games=[["The Walking Dead: Season Two","","twd2"],["ゼルダの伝説 ブレス オブ ザ ワイルド","","botw"],["The Walking Dead: The Final Season","","twd4"],["Red Dead Redemption 2","","rdr2"],["Beyond: Two Souls","","beyond"],["Valorant","","valo"]];
 const rest=`I Want Someone Badly|Jeff Buckley, Shudder to Think
 Duvet|bôa
 do i clench my fists?|ridgeclub
